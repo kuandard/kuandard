@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>發泡材料重量計算器</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .calculator-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s;
+      background-color: #fff;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .dimension-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .result-item:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px dashed #93c5fd;
+      font-weight: bold;
+      color: #1d4ed8;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 400px) {
+      .dimension-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator-card">
+  <h2>發泡材料重量計算器</h2>
+
+  <!-- 材料與倍率選單 -->
+  <div class="form-group">
+    <label for="materialSelect">選擇材料與發泡倍率</label>
+    <select id="materialSelect" onchange="calculateWeight()">
+      <!-- EPE (基材密度約 920 kg/m³) -->
+      <optgroup label="EPE (聚乙烯發泡)">
+        <option value="83.6">EPE 11X (約 83.6 kg/m³)</option>
+        <option value="61.3">EPE 15X (約 61.3 kg/m³)</option>
+        <option value="51.1">EPE 18X (約 51.1 kg/m³)</option>
+        <option value="46.0">EPE 20X (約 46.0 kg/m³)</option>
+        <option value="40.0">EPE 23X (約 40.0 kg/m³)</option>
+        <option value="36.8" selected>EPE 25X (約 36.8 kg/m³)</option>
+        <option value="30.7">EPE 30X (約 30.7 kg/m³)</option>
+        <option value="26.3">EPE 35X (約 26.3 kg/m³)</option>
+        <option value="23.0">EPE 40X (約 23.0 kg/m³)</option>
+        <option value="20.4">EPE 45X (約 20.4 kg/m³)</option>
+        <option value="19.2">EPE 48X (約 19.2 kg/m³)</option>
+        <option value="18.4">EPE 50X (約 18.4 kg/m³)</option>
+        <option value="16.7">EPE 55X (約 16.7 kg/m³)</option>
+      </optgroup>
+
+      <!-- EPP (基材密度約 900 kg/m³) -->
+      <optgroup label="EPP (聚丙烯發泡)">
+        <option value="81.8">EPP 11X (約 81.8 kg/m³)</option>
+        <option value="60.0">EPP 15X (約 60.0 kg/m³)</option>
+        <option value="50.0">EPP 18X (約 50.0 kg/m³)</option>
+        <option value="45.0">EPP 20X (約 45.0 kg/m³)</option>
+        <option value="39.1">EPP 23X (約 39.1 kg/m³)</option>
+        <option value="36.0">EPP 25X (約 36.0 kg/m³)</option>
+        <option value="30.0">EPP 30X (約 30.0 kg/m³)</option>
+        <option value="25.7">EPP 35X (約 25.7 kg/m³)</option>
+        <option value="22.5">EPP 40X (約 22.5 kg/m³)</option>
+        <option value="20.0">EPP 45X (約 20.0 kg/m³)</option>
+        <option value="18.8">EPP 48X (約 18.8 kg/m³)</option>
+        <option value="18.0">EPP 50X (約 18.0 kg/m³)</option>
+        <option value="16.4">EPP 55X (約 16.4 kg/m³)</option>
+      </optgroup>
+
+      <!-- EPS (基材密度約 1050 kg/m³) -->
+      <optgroup label="EPS (聚苯乙烯 / 保麗龍)">
+        <option value="95.5">EPS 11X (約 95.5 kg/m³)</option>
+        <option value="70.0">EPS 15X (約 70.0 kg/m³)</option>
+        <option value="58.3">EPS 18X (約 58.3 kg/m³)</option>
+        <option value="52.5">EPS 20X (約 52.5 kg/m³)</option>
+        <option value="45.7">EPS 23X (約 45.7 kg/m³)</option>
+        <option value="42.0">EPS 25X (約 42.0 kg/m³)</option>
+        <option value="35.0">EPS 30X (約 35.0 kg/m³)</option>
+        <option value="30.0">EPS 35X (約 30.0 kg/m³)</option>
+        <option value="26.3">EPS 40X (約 26.3 kg/m³)</option>
+        <option value="23.3">EPS 45X (約 23.3 kg/m³)</option>
+        <option value="21.9">EPS 48X (約 21.9 kg/m³)</option>
+        <option value="21.0">EPS 50X (約 21.0 kg/m³)</option>
+        <option value="19.1">EPS 55X (約 19.1 kg/m³)</option>
+      </optgroup>
+
+      <!-- EPO (EPE+EPS 複合發泡，基材約 980 kg/m³) -->
+      <optgroup label="EPO (聚烯烴複合發泡)">
+        <option value="89.1">EPO 11X (約 89.1 kg/m³)</option>
+        <option value="65.3">EPO 15X (約 65.3 kg/m³)</option>
+        <option value="54.4">EPO 18X (約 54.4 kg/m³)</option>
+        <option value="49.0">EPO 20X (約 49.0 kg/m³)</option>
+        <option value="42.6">EPO 23X (約 42.6 kg/m³)</option>
+        <option value="39.2">EPO 25X (約 39.2 kg/m³)</option>
+        <option value="32.7">EPO 30X (約 32.7 kg/m³)</option>
+        <option value="28.0">EPO 35X (約 28.0 kg/m³)</option>
+        <option value="24.5">EPO 40X (約 24.5 kg/m³)</option>
+        <option value="21.8">EPO 45X (約 21.8 kg/m³)</option>
+        <option value="20.4">EPO 48X (約 20.4 kg/m³)</option>
+        <option value="19.6">EPO 50X (約 19.6 kg/m³)</option>
+        <option value="17.8">EPO 55X (約 17.8 kg/m³)</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <!-- 尺寸輸入欄位 (公分) -->
+  <div class="form-group">
+    <label>輸入尺寸 (單位：cm)</label>
+    <div class="dimension-grid">
+      <input type="number" id="length" placeholder="長" step="any" inputmode="decimal" oninput="calculateWeight()">
+      <input type="number" id="width" placeholder="寬" step="any" inputmode="decimal" oninput="calculateWeight()">
+      <input type="number" id="height" placeholder="高" step="any" inputmode="decimal" oninput="calculateWeight()">
+    </div>
+  </div>
+
+  <!-- 計算結果 -->
+  <div class="result-box">
+    <div class="result-item">
+      <span>計算體積：</span>
+      <span id="volumeResult">0 cm³ (0 m³)</span>
+    </div>
+    <div class="result-item">
+      <span>材料密度：</span>
+      <span id="densityResult">36.8 kg/m³</span>
+    </div>
+    <div class="result-item">
+      <span>預估重量：</span>
+      <span id="weightResult">0 g (0 kg)</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function calculateWeight() {
+    const select = document.getElementById('materialSelect');
+    const density = parseFloat(select.value); // kg/m³
+    
+    const length = parseFloat(document.getElementById('length').value) || 0;
+    const width = parseFloat(document.getElementById('width').value) || 0;
+    const height = parseFloat(document.getElementById('height').value) || 0;
+
+    // 計算體積
+    const volumeCm3 = length * width * height; // cm³
+    const volumeM3 = volumeCm3 / 1000000;      // m³
+
+    // 計算重量 (kg = m³ * kg/m³)
+    const weightKg = volumeM3 * density;
+    const weightG = weightKg * 1000;
+
+    // 更新顯示
+    document.getElementById('densityResult').innerText = density.toFixed(1) + ' kg/m³';
+    
+    document.getElementById('volumeResult').innerText = 
+      volumeCm3.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' cm³ (' + 
+      volumeM3.toFixed(4) + ' m³)';
+
+    document.getElementById('weightResult').innerText = 
+      weightG.toFixed(2) + ' g (' + 
+      weightKg.toFixed(3) + ' kg)';
+  }
+</script>
+
+</body>
+</html>
