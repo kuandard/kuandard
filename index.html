@@ -1,250 +1,383 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>發泡材料重量計算器</title>
-  <style>
-    :root {
-      --primary-color: #2563eb;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --border-color: #cbd5e1;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 16px;
-    }
-
-    .calculator-card {
-      background: var(--card-bg);
-      width: 100%;
-      max-width: 480px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 24px;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      text-align: center;
-      margin-bottom: 20px;
-      color: var(--primary-color);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      outline: none;
-      transition: border-color 0.2s;
-      background-color: #fff;
-    }
-
-    select:focus, input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    .dimension-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .result-box {
-      margin-top: 20px;
-      background-color: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .result-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .result-item:last-child {
-      margin-bottom: 0;
-      padding-top: 8px;
-      border-top: 1px dashed #93c5fd;
-      font-weight: bold;
-      color: #1d4ed8;
-      font-size: 1.1rem;
-    }
-
-    @media (max-width: 400px) {
-      .dimension-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>廣大包裝計算中心</title>
+<style>
+:root{
+  --primary:#2563eb;
+  --primary-hover:#1d4ed8;
+  --accent:#667eea;
+  --accent2:#764ba2;
+  --bg:#f1f5f9;
+  --card:#ffffff;
+  --text:#1e293b;
+  --border:#cbd5e1;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;padding:20px;}
+.header{max-width:900px;margin:0 auto 16px auto;text-align:center;}
+.header h1{font-size:22px;color:var(--primary);letter-spacing:1px;}
+.header p{font-size:13px;color:#64748b;margin-top:4px;}
+.tabs{max-width:900px;margin:0 auto;display:flex;gap:8px;overflow:auto;padding-bottom:8px;}
+.tab-btn{flex:1;white-space:nowrap;padding:12px 16px;border:1px solid var(--border);background:var(--card);border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;color:#475569;transition:.2s;min-width:140px;}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 4px 12px rgba(37,99,235,.25);}
+.tab-panel{display:none;max-width:900px;margin:16px auto 0 auto;}
+.tab-panel.active{display:block;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 4px 15px rgba(0,0,0,.08);padding:24px;}
+.card h2{font-size:18px;text-align:center;color:var(--primary);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;}
+.section-title{font-weight:bold;font-size:16px;margin-bottom:12px;color:#334155;border-bottom:2px solid var(--accent);padding-bottom:8px;}
+.form-group{margin-bottom:14px;}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#334155;}
+select,input{width:100%;padding:11px 12px;font-size:15px;border:1px solid var(--border);border-radius:8px;outline:none;background:#fff;transition:.2s;}
+select:focus,input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.15);}
+.dimension-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:600px){.dimension-grid{grid-template-columns:1fr;}}
+.result-box{margin-top:16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;}
+.result-item{display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;}
+.result-item:last-child{margin-bottom:0;padding-top:8px;border-top:1px dashed #93c5fd;font-weight:bold;color:#1d4ed8;font-size:15px;}
+.result-label{display:block;font-weight:bold;color:#334155;background:#e8f0fe;padding:10px;margin:6px 0;border-left:4px solid var(--accent);border-radius:6px;font-size:14px;}
+.warning{display:block;color:#b91c1c;margin:6px 0;padding:8px 10px;background:#ffe6e6;border-left:4px solid #ef4444;border-radius:6px;font-size:13px;}
+.box-result{display:block;background:#e8ffe8;padding:10px;margin:6px 0;border-left:4px solid #22c55e;border-radius:6px;}
+button.primary{padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:15px;margin:8px 4px 8px 0;transition:.2s;}
+button.primary:hover{background:var(--accent2);}
+.div_A{margin-bottom:18px;padding:16px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;}
+.div_A:last-child{margin-bottom:0;}
+.note{font-size:12px;color:#64748b;margin-top:4px;}
+.result-card{background:#eef2f7;border-left:5px solid var(--primary);padding:16px;border-radius:8px;margin-top:18px;}
+.result-card h3{margin:0 0 10px 0;color:var(--primary);font-size:16px;}
+.result-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;}
+.result-row:last-child{margin-bottom:0;font-weight:bold;font-size:16px;color:var(--primary);border-top:1px solid #d0d7de;padding-top:8px;}
+</style>
 </head>
 <body>
+<div class="header">
+  <h1>廣大包裝計算中心</h1>
+  <p>發泡重量 / A1箱刀模 / 瓦楞紙重 ‧ 三合一版本</p>
+</div>
 
-<div class="calculator-card">
-  <h2>發泡材料重量計算器</h2>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="tab1">① 發泡材料重量</button>
+  <button class="tab-btn" data-tab="tab2">② A1箱 / BOX 刀模</button>
+  <button class="tab-btn" data-tab="tab3">③ 瓦楞紙材重量</button>
+</div>
 
-  <!-- 材料與倍率選單 -->
-  <div class="form-group">
-    <label for="materialSelect">選擇材料與發泡倍率</label>
-    <select id="materialSelect" onchange="calculateWeight()">
-      <!-- EPE (基材密度約 920 kg/m³) -->
-      <optgroup label="EPE (聚乙烯發泡)">
-        <option value="83.6">EPE 11X (約 83.6 kg/m³)</option>
-        <option value="61.3">EPE 15X (約 61.3 kg/m³)</option>
-        <option value="51.1">EPE 18X (約 51.1 kg/m³)</option>
-        <option value="46.0">EPE 20X (約 46.0 kg/m³)</option>
-        <option value="40.0">EPE 23X (約 40.0 kg/m³)</option>
-        <option value="36.8" selected>EPE 25X (約 36.8 kg/m³)</option>
-        <option value="30.7">EPE 30X (約 30.7 kg/m³)</option>
-        <option value="26.3">EPE 35X (約 26.3 kg/m³)</option>
-        <option value="23.0">EPE 40X (約 23.0 kg/m³)</option>
-        <option value="20.4">EPE 45X (約 20.4 kg/m³)</option>
-        <option value="19.2">EPE 48X (約 19.2 kg/m³)</option>
-        <option value="18.4">EPE 50X (約 18.4 kg/m³)</option>
-        <option value="16.7">EPE 55X (約 16.7 kg/m³)</option>
-      </optgroup>
-
-      <!-- EPP (基材密度約 900 kg/m³) -->
-      <optgroup label="EPP (聚丙烯發泡)">
-        <option value="81.8">EPP 11X (約 81.8 kg/m³)</option>
-        <option value="60.0">EPP 15X (約 60.0 kg/m³)</option>
-        <option value="50.0">EPP 18X (約 50.0 kg/m³)</option>
-        <option value="45.0">EPP 20X (約 45.0 kg/m³)</option>
-        <option value="39.1">EPP 23X (約 39.1 kg/m³)</option>
-        <option value="36.0">EPP 25X (約 36.0 kg/m³)</option>
-        <option value="30.0">EPP 30X (約 30.0 kg/m³)</option>
-        <option value="25.7">EPP 35X (約 25.7 kg/m³)</option>
-        <option value="22.5">EPP 40X (約 22.5 kg/m³)</option>
-        <option value="20.0">EPP 45X (約 20.0 kg/m³)</option>
-        <option value="18.8">EPP 48X (約 18.8 kg/m³)</option>
-        <option value="18.0">EPP 50X (約 18.0 kg/m³)</option>
-        <option value="16.4">EPP 55X (約 16.4 kg/m³)</option>
-      </optgroup>
-
-      <!-- EPS (基材密度約 1050 kg/m³) -->
-      <optgroup label="EPS (聚苯乙烯 / 保麗龍)">
-        <option value="95.5">EPS 11X (約 95.5 kg/m³)</option>
-        <option value="70.0">EPS 15X (約 70.0 kg/m³)</option>
-        <option value="58.3">EPS 18X (約 58.3 kg/m³)</option>
-        <option value="52.5">EPS 20X (約 52.5 kg/m³)</option>
-        <option value="45.7">EPS 23X (約 45.7 kg/m³)</option>
-        <option value="42.0">EPS 25X (約 42.0 kg/m³)</option>
-        <option value="35.0">EPS 30X (約 35.0 kg/m³)</option>
-        <option value="30.0">EPS 35X (約 30.0 kg/m³)</option>
-        <option value="26.3">EPS 40X (約 26.3 kg/m³)</option>
-        <option value="23.3">EPS 45X (約 23.3 kg/m³)</option>
-        <option value="21.9">EPS 48X (約 21.9 kg/m³)</option>
-        <option value="21.0">EPS 50X (約 21.0 kg/m³)</option>
-        <option value="19.1">EPS 55X (約 19.1 kg/m³)</option>
-      </optgroup>
-
-      <!-- EPO (EPE+EPS 複合發泡，基材約 980 kg/m³) -->
-      <optgroup label="EPO (聚烯烴複合發泡)">
-        <option value="89.1">EPO 11X (約 89.1 kg/m³)</option>
-        <option value="65.3">EPO 15X (約 65.3 kg/m³)</option>
-        <option value="54.4">EPO 18X (約 54.4 kg/m³)</option>
-        <option value="49.0">EPO 20X (約 49.0 kg/m³)</option>
-        <option value="42.6">EPO 23X (約 42.6 kg/m³)</option>
-        <option value="39.2">EPO 25X (約 39.2 kg/m³)</option>
-        <option value="32.7">EPO 30X (約 32.7 kg/m³)</option>
-        <option value="28.0">EPO 35X (約 28.0 kg/m³)</option>
-        <option value="24.5">EPO 40X (約 24.5 kg/m³)</option>
-        <option value="21.8">EPO 45X (約 21.8 kg/m³)</option>
-        <option value="20.4">EPO 48X (約 20.4 kg/m³)</option>
-        <option value="19.6">EPO 50X (約 19.6 kg/m³)</option>
-        <option value="17.8">EPO 55X (約 17.8 kg/m³)</option>
-      </optgroup>
-    </select>
-  </div>
-
-  <!-- 尺寸輸入欄位 (公分) -->
-  <div class="form-group">
-    <label>輸入尺寸 (單位：cm)</label>
-    <div class="dimension-grid">
-      <input type="number" id="length" placeholder="長" step="any" inputmode="decimal" oninput="calculateWeight()">
-      <input type="number" id="width" placeholder="寬" step="any" inputmode="decimal" oninput="calculateWeight()">
-      <input type="number" id="height" placeholder="高" step="any" inputmode="decimal" oninput="calculateWeight()">
+<!-- TAB 1 : 發泡 -->
+<div id="tab1" class="tab-panel active">
+  <div class="card">
+    <h2>發泡材料重量計算器</h2>
+    <div class="form-group">
+      <label for="f_materialSelect">選擇材料與發泡倍率</label>
+      <select id="f_materialSelect" onchange="calculateWeight()">
+        <optgroup label="EPE (聚乙烯發泡)">
+          <option value="83.6">EPE 11X (約 83.6 kg/m³)</option>
+          <option value="61.3">EPE 15X (約 61.3 kg/m³)</option>
+          <option value="51.1">EPE 18X (約 51.1 kg/m³)</option>
+          <option value="46.0">EPE 20X (約 46.0 kg/m³)</option>
+          <option value="40.0">EPE 23X (約 40.0 kg/m³)</option>
+          <option value="36.8" selected>EPE 25X (約 36.8 kg/m³)</option>
+          <option value="30.7">EPE 30X (約 30.7 kg/m³)</option>
+          <option value="26.3">EPE 35X (約 26.3 kg/m³)</option>
+          <option value="23.0">EPE 40X (約 23.0 kg/m³)</option>
+          <option value="20.4">EPE 45X (約 20.4 kg/m³)</option>
+          <option value="19.2">EPE 48X (約 19.2 kg/m³)</option>
+          <option value="18.4">EPE 50X (約 18.4 kg/m³)</option>
+          <option value="16.7">EPE 55X (約 16.7 kg/m³)</option>
+        </optgroup>
+        <optgroup label="EPP (聚丙烯發泡)">
+          <option value="81.8">EPP 11X (約 81.8 kg/m³)</option>
+          <option value="60.0">EPP 15X (約 60.0 kg/m³)</option>
+          <option value="50.0">EPP 18X (約 50.0 kg/m³)</option>
+          <option value="45.0">EPP 20X (約 45.0 kg/m³)</option>
+          <option value="39.1">EPP 23X (約 39.1 kg/m³)</option>
+          <option value="36.0">EPP 25X (約 36.0 kg/m³)</option>
+          <option value="30.0">EPP 30X (約 30.0 kg/m³)</option>
+          <option value="25.7">EPP 35X (約 25.7 kg/m³)</option>
+          <option value="22.5">EPP 40X (約 22.5 kg/m³)</option>
+          <option value="20.0">EPP 45X (約 20.0 kg/m³)</option>
+          <option value="18.8">EPP 48X (約 18.8 kg/m³)</option>
+          <option value="18.0">EPP 50X (約 18.0 kg/m³)</option>
+          <option value="16.4">EPP 55X (約 16.4 kg/m³)</option>
+        </optgroup>
+        <optgroup label="EPS (聚苯乙烯 / 保麗龍)">
+          <option value="95.5">EPS 11X (約 95.5 kg/m³)</option>
+          <option value="70.0">EPS 15X (約 70.0 kg/m³)</option>
+          <option value="58.3">EPS 18X (約 58.3 kg/m³)</option>
+          <option value="52.5">EPS 20X (約 52.5 kg/m³)</option>
+          <option value="45.7">EPS 23X (約 45.7 kg/m³)</option>
+          <option value="42.0">EPS 25X (約 42.0 kg/m³)</option>
+          <option value="35.0">EPS 30X (約 35.0 kg/m³)</option>
+          <option value="30.0">EPS 35X (約 30.0 kg/m³)</option>
+          <option value="26.3">EPS 40X (約 26.3 kg/m³)</option>
+          <option value="23.3">EPS 45X (約 23.3 kg/m³)</option>
+          <option value="21.9">EPS 48X (約 21.9 kg/m³)</option>
+          <option value="21.0">EPS 50X (約 21.0 kg/m³)</option>
+          <option value="19.1">EPS 55X (約 19.1 kg/m³)</option>
+        </optgroup>
+        <optgroup label="EPO (聚烯烴複合發泡)">
+          <option value="89.1">EPO 11X (約 89.1 kg/m³)</option>
+          <option value="65.3">EPO 15X (約 65.3 kg/m³)</option>
+          <option value="54.4">EPO 18X (約 54.4 kg/m³)</option>
+          <option value="49.0">EPO 20X (約 49.0 kg/m³)</option>
+          <option value="42.6">EPO 23X (約 42.6 kg/m³)</option>
+          <option value="39.2">EPO 25X (約 39.2 kg/m³)</option>
+          <option value="32.7">EPO 30X (約 32.7 kg/m³)</option>
+          <option value="28.0">EPO 35X (約 28.0 kg/m³)</option>
+          <option value="24.5">EPO 40X (約 24.5 kg/m³)</option>
+          <option value="21.8">EPO 45X (約 21.8 kg/m³)</option>
+          <option value="20.4">EPO 48X (約 20.4 kg/m³)</option>
+          <option value="19.6">EPO 50X (約 19.6 kg/m³)</option>
+          <option value="17.8">EPO 55X (約 17.8 kg/m³)</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>輸入尺寸 (單位：cm)</label>
+      <div class="dimension-grid">
+        <input type="number" id="f_length" placeholder="長" step="any" inputmode="decimal" oninput="calculateWeight()">
+        <input type="number" id="f_width" placeholder="寬" step="any" inputmode="decimal" oninput="calculateWeight()">
+        <input type="number" id="f_height" placeholder="高" step="any" inputmode="decimal" oninput="calculateWeight()">
+      </div>
+    </div>
+    <div class="result-box">
+      <div class="result-item"><span>計算體積：</span><span id="f_volumeResult">0 cm³ (0 m³)</span></div>
+      <div class="result-item"><span>材料密度：</span><span id="f_densityResult">36.8 kg/m³</span></div>
+      <div class="result-item"><span>預估重量：</span><span id="f_weightResult">0 g (0 kg)</span></div>
     </div>
   </div>
+</div>
 
-  <!-- 計算結果 -->
-  <div class="result-box">
-    <div class="result-item">
-      <span>計算體積：</span>
-      <span id="volumeResult">0 cm³ (0 m³)</span>
+<!-- TAB 2 : KD / A1 -->
+<div id="tab2" class="tab-panel">
+  <div class="card">
+    <h2>刀模與打樣米數計算</h2>
+    <div class="div_A">
+      <div class="section-title">廣大A1箱計算</div>
+      <div class="form-group">
+        <label>輸入尺寸 (單位：mm)</label>
+        <div class="dimension-grid">
+          <input type="number" id="number1" placeholder="長" step="any" inputmode="decimal">
+          <input type="number" id="number2" placeholder="寬" step="any" inputmode="decimal">
+          <input type="number" id="number3" placeholder="高" step="any" inputmode="decimal">
+        </div>
+      </div>
+      <button class="primary" onclick="add()">計算A1箱打樣米數</button>
+      <span class="result-label">打樣米數:<span id="span1">0</span>米</span>
+      <span class="result-label">刀模費初估:<span id="span2">0</span>NT</span>
+      <span id="span3" class="warning" style="display:none"></span>
+      <span id="span4" class="warning" style="display:none"></span>
+      <span id="span5" class="warning" style="display:none"></span>
+      <span id="span6" class="warning" style="display:none"></span>
+      <span id="span7" class="warning" style="display:none"></span>
     </div>
-    <div class="result-item">
-      <span>材料密度：</span>
-      <span id="densityResult">36.8 kg/m³</span>
+    <div class="div_A">
+      <div class="section-title">BOX 長寬高計算</div>
+      <p class="note" style="margin-bottom:10px;">計算倍數: L × 6 | W × 15 | H × 24</p>
+      <div class="form-group">
+        <label>輸入尺寸 (單位：mm)</label>
+        <div class="dimension-grid">
+          <input type="number" id="boxL" placeholder="長 L" step="any" inputmode="decimal">
+          <input type="number" id="boxW" placeholder="寬 W" step="any" inputmode="decimal">
+          <input type="number" id="boxH" placeholder="高 H" step="any" inputmode="decimal">
+        </div>
+      </div>
+      <button class="primary" onclick="calculateBox()">計算BOX刀模費用及米數</button>
+      <span class="result-label">打樣米數:<span id="boxSpan1">0</span>米</span>
+      <span class="result-label">刀模費初估:<span id="boxSpan2">0</span>NT</span>
     </div>
-    <div class="result-item">
-      <span>預估重量：</span>
-      <span id="weightResult">0 g (0 kg)</span>
+  </div>
+</div>
+
+<!-- TAB 3 : 瓦楞 -->
+<div id="tab3" class="tab-panel">
+  <div class="card">
+    <h2>瓦楞紙材重量與密度計算機</h2>
+    <div class="form-group">
+      <label for="c_boxType">選單1｜箱型</label>
+      <select id="c_boxType" onchange="c_updateForm()">
+        <option value="A1">A1 箱</option>
+        <option value="A5">A5 箱 (無四片下蓋)</option>
+        <option value="flat">平板 (僅計長 × 寬)</option>
+        <option value="pizzabox">PIZZABOX</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="c_materialSelect">選單2｜顏色與破裂強度</label>
+      <select id="c_materialSelect" onchange="c_calculate()">
+        <option value="仿_AB_16">仿色 AB/F (16kg)</option>
+        <option value="黃_AB_18">黃色 AB/F (18kg)</option>
+        <option value="黃_AB_24">黃色 AB/F (24kg)</option>
+        <option value="仿_B_12">仿色 B/F (12kg)</option>
+        <option value="仿_E_14">仿色 E/F (14kg)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="c_fluteSelect">選單3｜楞別與厚度</label>
+      <select id="c_fluteSelect" onchange="c_syncFluteThickness()">
+        <option value="AB" data-thick="8">AB/F (厚度 8 mm)</option>
+        <option value="A" data-thick="5">A/F (厚度 5 mm)</option>
+        <option value="B" data-thick="3">B/F (厚度 3 mm)</option>
+        <option value="E" data-thick="1.5">E/F (厚度 1.5 mm)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>輸入尺寸 (單位：mm)</label>
+      <div class="dimension-grid">
+        <div id="c_groupL"><input type="number" id="c_length" value="200" placeholder="長 L" step="any" inputmode="decimal" oninput="c_calculate()"></div>
+        <div id="c_groupW"><input type="number" id="c_width" value="150" placeholder="寬 W" step="any" inputmode="decimal" oninput="c_calculate()"></div>
+        <div id="c_groupH"><input type="number" id="c_height" value="100" placeholder="高 H" step="any" inputmode="decimal" oninput="c_calculate()"></div>
+      </div>
+    </div>
+    <div class="result-card">
+      <h3>計算結果</h3>
+      <div class="result-row"><span>材質密度：</span><span id="c_resDensity">0.00 kg/m³</span></div>
+      <div class="result-row"><span>瓦楞厚度：</span><span id="c_resThick">8 mm</span></div>
+      <div class="result-row"><span>展開總面積：</span><span id="c_resArea">0 mm²</span></div>
+      <div class="result-row"><span>預估紙箱重量：</span><span id="c_resWeight">0.00 g</span></div>
     </div>
   </div>
 </div>
 
 <script>
-  function calculateWeight() {
-    const select = document.getElementById('materialSelect');
-    const density = parseFloat(select.value); // kg/m³
-    
-    const length = parseFloat(document.getElementById('length').value) || 0;
-    const width = parseFloat(document.getElementById('width').value) || 0;
-    const height = parseFloat(document.getElementById('height').value) || 0;
+// ---- Tab switching ----
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
 
-    // 計算體積
-    const volumeCm3 = length * width * height; // cm³
-    const volumeM3 = volumeCm3 / 1000000;      // m³
+// ---- TAB1 公式 原封不動，僅ID更名為 f_ ----
+function calculateWeight() {
+  const select = document.getElementById('f_materialSelect');
+  const density = parseFloat(select.value);
+  const length = parseFloat(document.getElementById('f_length').value) || 0;
+  const width = parseFloat(document.getElementById('f_width').value) || 0;
+  const height = parseFloat(document.getElementById('f_height').value) || 0;
+  const volumeCm3 = length * width * height;
+  const volumeM3 = volumeCm3 / 1000000;
+  const weightKg = volumeM3 * density;
+  const weightG = weightKg * 1000;
+  document.getElementById('f_densityResult').innerText = density.toFixed(1) + ' kg/m³';
+  document.getElementById('f_volumeResult').innerText = 
+    volumeCm3.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' cm³ (' + 
+    volumeM3.toFixed(4) + ' m³)';
+  document.getElementById('f_weightResult').innerText = 
+    weightG.toFixed(2) + ' g (' + 
+    weightKg.toFixed(3) + ' kg)';
+}
 
-    // 計算重量 (kg = m³ * kg/m³)
-    const weightKg = volumeM3 * density;
-    const weightG = weightKg * 1000;
+// ---- TAB2 公式 原封不動 ----
+function add(){
+    var number1 = parseInt(document.getElementById("number1").value);
+    var number2 = parseInt(document.getElementById("number2").value);
+    var number3 = parseInt(document.getElementById("number3").value);
+    if (isNaN(number1) || isNaN(number2) || isNaN(number3)) {
+        alert("請輸入有效數字");
+        return;
+    }
+    ["span3","span4","span5","span6","span7"].forEach(id=>{
+      const el=document.getElementById(id); el.innerHTML=""; el.style.display="none";
+    });
+    var number4 = number2 / 2 + 2.5;
+    var number5 = number3 + number4 * 2;
+    var number6 = (number1 + number2) * 2 + 35;
+    var result = ((number1 + number2) * 8 + (number2 + number3 + 5) * 8) / 1000;
+    document.getElementById("span1").innerHTML = result.toFixed(2);
+    var result2 = ((number1 + number2) * 8 + ((number2 + number3 + 5) * 8 + number3)) / 1000 * 330;
+    document.getElementById("span2").innerHTML = result2.toFixed(0);
+    function setWarn(id,msg){
+      if(msg){const e=document.getElementById(id); e.innerHTML=msg; e.style.display="block";}
+    }
+    if(number3 <= 310) { setWarn("span3","⚠️ 壓線高度不足90mm需開刀模"); }
+    if(number2 < 130) { setWarn("span4","⚠️ 第二脈寬度不足130mm需開刀模"); }
+    if(number4 > 370) { setWarn("span5","⚠️ 折蓋高度超過370mm廠內不能做"); }
+    if(number5 > 1300) { setWarn("span6","⚠️ 總紙幅超過1300mm廠內不能做"); }
+    if(number6 > 2700) { setWarn("span7","⚠️ 總紙長超過2700mm 需兩片接"); }
+}
+function calculateBox(){
+    var boxL = parseFloat(document.getElementById("boxL").value);
+    var boxW = parseFloat(document.getElementById("boxW").value);
+    var boxH = parseFloat(document.getElementById("boxH").value);
+    if (isNaN(boxL) || isNaN(boxW) || isNaN(boxH)) {
+        alert("請輸入有效數字");
+        return;
+    }
+    var resultL = boxL * 6;
+    var resultW = boxW * 15;
+    var resultH = boxH * 24;
+    var number4 = resultW / 2 + 2.5;
+    var number5 = resultH + number4 * 2;
+    var number6 = (resultL + resultW) * 2 + 35;
+    var boxResult = ((resultL + resultW) * 8 + (resultW + resultH + 5) * 8) / 10000;
+    document.getElementById("boxSpan1").innerHTML = boxResult.toFixed(2);
+    var boxResult2 = ((resultL + resultW) * 8 + ((resultW + resultH + 5) * 8 + resultH)) / 10000 * 330;
+    document.getElementById("boxSpan2").innerHTML = boxResult2.toFixed(0);
+}
 
-    // 更新顯示
-    document.getElementById('densityResult').innerText = density.toFixed(1) + ' kg/m³';
-    
-    document.getElementById('volumeResult').innerText = 
-      volumeCm3.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' cm³ (' + 
-      volumeM3.toFixed(4) + ' m³)';
-
-    document.getElementById('weightResult').innerText = 
-      weightG.toFixed(2) + ' g (' + 
-      weightKg.toFixed(3) + ' kg)';
-  }
+// ---- TAB3 公式 原封不動，僅ID更名為 c_ ----
+const densityDB = {
+    "仿_AB_16": 104.92,
+    "黃_AB_18": 122.90,
+    "黃_AB_24": 135.00,
+    "仿_B_12": 200.21,
+    "仿_E_14": 397.08
+};
+function c_updateForm() {
+    const boxType = document.getElementById('c_boxType').value;
+    const groupH = document.getElementById('c_groupH');
+    const groupW = document.getElementById('c_groupW');
+    if (boxType === 'flat') {
+        groupH.style.display = 'none';
+        groupW.style.display = 'block';
+    } else {
+        groupH.style.display = 'block';
+        groupW.style.display = 'block';
+    }
+    c_calculate();
+}
+function c_syncFluteThickness() { c_calculate(); }
+function c_calculate() {
+    const boxType = document.getElementById('c_boxType').value;
+    const materialKey = document.getElementById('c_materialSelect').value;
+    const fluteSelect = document.getElementById('c_fluteSelect');
+    const thickness = parseFloat(fluteSelect.selectedOptions[0].getAttribute('data-thick'));
+    const L = parseFloat(document.getElementById('c_length').value) || 0;
+    const W = parseFloat(document.getElementById('c_width').value) || 0;
+    const H = parseFloat(document.getElementById('c_height').value) || 0;
+    let density = densityDB[materialKey] || 100;
+    let totalArea = 0;
+    if (boxType === 'flat') {
+        totalArea = L * W;
+    } else if (boxType === 'A1') {
+        totalArea = (35 * H) + (2 * (L + W) * H) + (4 * (L + W) * (W / 2 + 2.5));
+    } else if (boxType === 'A5') {
+        totalArea = (35 * H) + (2 * (L + W) * H) + (2 * (L + W) * (W / 2 + 2.5));
+    } else if (boxType === 'pizzabox') {
+        const frontCover = (L * H) + (2 * H * H);
+        const topCover = (L * W) + (2 * W * H);
+        const frontPanel = (L * H) + (H * W);
+        const backPanel = (L * H) + (H * W);
+        const bottomPanel = (L * W) + (2 * H * W * 2);
+        totalArea = frontCover + topCover + frontPanel + backPanel + bottomPanel;
+    }
+    const volume_m3 = totalArea * thickness * 1e-9;
+    const weight_g = volume_m3 * density * 1000;
+    document.getElementById('c_resDensity').innerText = density.toFixed(2) + " kg/m³";
+    document.getElementById('c_resThick').innerText = thickness + " mm";
+    document.getElementById('c_resArea').innerText = totalArea.toLocaleString('zh-TW', {maximumFractionDigits: 1}) + " mm² (" + (totalArea / 100).toFixed(2) + " cm²)";
+    document.getElementById('c_resWeight').innerText = weight_g.toFixed(1) + " g";
+}
+window.addEventListener('load',()=>{ c_updateForm(); calculateWeight(); });
+document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && document.getElementById('tab2').classList.contains('active')) {
+        // 在第二分頁按Enter預設計算A1
+    }
+});
 </script>
-
 </body>
 </html>
